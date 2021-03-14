@@ -1,4 +1,4 @@
 # chef-resources
 
-![chef-resources](./chef-resources.png)
+![chef-resources](chef-resource.png)
 Build a small containerized Web dashboard for searching and viewing Chef Infra resources.
