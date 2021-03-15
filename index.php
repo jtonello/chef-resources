@@ -43,6 +43,7 @@ $(document).ready(function(){
 <?php
         $dir = './resources';
         $lines = array_diff(scandir($dir), array('..', '.'));
+        $url = "https://docs.chef.io/resources";
 
         echo "<tr>\n";
         for ($i=0; $i<sizeof($lines)+2; $i++) {
@@ -50,7 +51,7 @@ $(document).ready(function(){
                 $resource_file = $lines[$i];
                 if (strpos($resource_file, '.yaml')) {
     
-                        echo "<td width='300px'><a href='https://docs.chef.io/resources/$resource_name'>$resource_name</a></td>";
+                        echo "<td width='300px'><a href='$url/$resource_name#examples'>$resource_name</a></td>";
                         echo "<td width='400px'>";
                                 $yamlData = file_get_contents('./resources/' . $resource_file);
                                 $parsed = yaml_parse($yamlData);
@@ -61,7 +62,7 @@ $(document).ready(function(){
                                                 $string = $parsed['resource_description_list'][2]['markdown'];
                                         }
                                 }
-                                echo preg_replace("/\*{2}(.*?)\*{2,}/", '<b>$1</b>', $string);
+                                echo preg_replace("/\*{2}(.*?)\*{2,}/", '<a href="' . $url . '/' . $resource_name . '">$1</a>', $string);
 
                         echo "</td>";
                 //      if(($i+1)%2==0 && $i!=sizeof($lines)-1) echo '</tr><tr>';
