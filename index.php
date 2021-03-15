@@ -62,7 +62,7 @@ $(document).ready(function(){
                                                 $string = $parsed['resource_description_list'][2]['markdown'];
                                         }
                                 }
-                                echo preg_replace("/\*{2}(.*?)\*{2,}/", '<a href="' . $url . '/' . $resource_name . '">$1</a>', $string);
+                                echo preg_replace("/\*{2}(.*?)\*{2,}/", '<a href="https://docs.chef.io/resources/$1">$1</a>', $string);
 
                         echo "</td>";
                 //      if(($i+1)%2==0 && $i!=sizeof($lines)-1) echo '</tr><tr>';
