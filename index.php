@@ -22,13 +22,6 @@ $(document).ready(function(){
     
     // Create the main tabs
     $("div#tabs").tabs();
-
-    // Show example
-    $('span').click(function() {
-	    varid = $(this).attr('id');
-	    element = $('div#' + varid).html();
-	    $('div#example').html(element);
-    })
 });
 </script>
 </head>
@@ -106,4 +99,11 @@ $(document).ready(function(){
                 $('#resourceContent').attr("src", href);
                 table.draw(false);
         });
+	
+    // Show example
+	$('span').click(function() {
+	    varid = $(this).attr('id');
+	    element = $('div#' + varid).html();
+	    $('div#example').html(element);
+	});
 </script>
