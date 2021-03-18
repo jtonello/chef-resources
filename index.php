@@ -56,6 +56,7 @@ $(document).ready(function(){
                                 $yamlData = file_get_contents('./resources/' . $resource_file);
                                 $parsed = yaml_parse($yamlData);
                                 $string = $parsed['resource_description_list'][0]['markdown'];
+                                $new_in = $parsed['resource_new_in'];
                                 if(!$string ) {
                                         $string = $parsed['resource_description_list'][1]['markdown'];
                                         if(!$string) {
@@ -63,7 +64,9 @@ $(document).ready(function(){
                                         }
                                 }
                                 echo preg_replace("/\*{2}(.*?)\*{2,}/", '<a href="https://docs.chef.io/resources/$1">$1</a>', $string);
-
+                        if ($new_in) {
+                            echo " (New in: $new_in)";
+                        }
                         echo "</td>";
                 //      if(($i+1)%2==0 && $i!=sizeof($lines)-1) echo '</tr><tr>';
                 echo "</tr>";
