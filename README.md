@@ -1,5 +1,5 @@
 # chef-resources
-Build a small containerized Web dashboard for searching and viewing [Chef Infra Resources](https://docs.chef.io/resources).
+Build a small containerized Web dashboard for searching and viewing [Chef Infra Resources](https://docs.chef.io/resources) and [Chef Inspec Resources(https://docs.chef.io/inspec/resources).
 
 ```
 $ git clone https://github.com/jtonello/chef-resources
