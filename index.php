@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="./css/style.css" />
 <script>
 $(document).ready(function(){
-    $('#mainTable').DataTable({
+    $('#resourceTable,#inspecTable').DataTable({
     "lengthMenu": [[5, 10, 20, 30, -1], [5, 10, 20, 30, "All"]],
     "bLengthChange":true,
     "bFilter": true
@@ -22,6 +22,7 @@ $(document).ready(function(){
     
     // Create the main tabs
     $("div#tabs").tabs();
+
 });
 </script>
 </head>
@@ -30,9 +31,10 @@ $(document).ready(function(){
 <div id="tabs">
         <ul>
                 <li><a href="#tabs-1">Chef Resources</a></li>
+                <li><a href="#tabs-2">Inspec Resources</a></li>
         </ul>
         <div id="tabs-1">
-        <table id='mainTable' width='100%'>
+        <table id='resourceTable' width='100%'>
             <thead>
             <tr>
                 <th colspan='1'>Resource</th>
@@ -45,7 +47,7 @@ $(document).ready(function(){
 
 	include 'Parsedown.php';
 	$Parsedown = new Parsedown();
-        $dir = './resources';
+        $dir = './chef-resources';
         $lines = array_diff(scandir($dir), array('..', '.'));
         $url = "https://docs.chef.io/resources";
 
@@ -53,16 +55,19 @@ $(document).ready(function(){
         for ($i=0; $i<sizeof($lines)+2; $i++) {
                 $resource_name = str_replace(".yaml","",$lines[$i]);
                 $resource_file = $lines[$i];
+                $yamlData = file_get_contents($dir . '/' . $resource_file);
+		if ($yamlData) {
+			$parsed = yaml_parse($yamlData);
+		}
+                $string = $parsed['resource_description_list'][0]['markdown'];
+		$new_in = $parsed['resource_new_in'];
+		$example = $parsed['examples'];
+
                 if (strpos($resource_file, '.yaml')) {
     
-			echo "<td width='300px'><a href='$url/$resource_name#examples'>$resource_name</a></td>";
-		        echo "<td width='75px'><span id='example$i'>Example</span></td>";
+			echo "<td width='200px'><a href='$url/$resource_name#examples'>$resource_name</a></td>";
+			echo "<td width='300px'>\n<span id='example$i'>Example</span>\n<div id='example$i' style='display:none;'>" . $Parsedown->text($example) . "</div>\n</td>";
                         echo "<td width='400px'>";
-                                $yamlData = file_get_contents('./resources/' . $resource_file);
-                                $parsed = yaml_parse($yamlData);
-                                $string = $parsed['resource_description_list'][0]['markdown'];
-				$new_in = $parsed['resource_new_in'];
-				$example = $parsed['examples'];
                                 if(!$string ) {
                                         $string = $parsed['resource_description_list'][1]['markdown'];
                                         if(!$string) {
@@ -74,9 +79,49 @@ $(document).ready(function(){
 				if($new_in) {
 					echo " (New in: $new_in)";
 				}
-			echo "<div id='example$i' style='display:none;'>" . $Parsedown->text($example) . "</div>";
                         echo "</td>";
                 //      if(($i+1)%2==0 && $i!=sizeof($lines)-1) echo '</tr><tr>';
+                echo "</tr>";
+                }
+        }
+?>
+        </td></tbody>
+        </table>
+        </div>
+        <div id="tabs-2">
+        <table id='inspecTable' width='100%'>
+            <thead>
+            <tr>
+                <th colspan='1'>Resource</th>
+                <th colspan='1'>Examples</th>
+                <th colspan='1'>Usage</th>
+            </tr>
+            </thead>
+            <tbody>
+<?php
+
+        $dir = './inspec-resources';
+        $lines = array_diff(scandir($dir), array('..', '.'));
+        $inspecurl = "https://docs.chef.io/inspec/resources";
+
+        echo "<tr>\n";
+        for ($i=0; $i<sizeof($lines)+2; $i++) {
+                $resource_name = str_replace(".md","",$lines[$i]);
+                $resource_file = $lines[$i];
+                $file_content = file_get_contents($dir . '/' . $resource_file);
+
+                if (strpos($resource_file, '.md') && $resource_name != '_index') {
+                        $snippet = preg_match("/^\#\# Syntax(.*)#\#/msU",$file_content,$match);
+                        echo "<td width='200px'><a href='$url/$resource_name'>$resource_name</a></td>";
+                        echo "<td width='300px'>\n<span id='inspec$i'>Example</span>\n<div id='inspec$i' style='display:none;'>" . $Parsedown->text($match[1])  . "</div>\n</td>";
+                        echo "<td width='400px'>";
+                                if($file_content) {
+                                        $use = preg_match("/^(Use.*)#\#/msU",$file_content,$match);
+                                        $snippet = $Parsedown->text($match[1]);
+                                }
+                                echo preg_replace("/<code>(.*?)<\/code>/", '<a href="$inspecurl/$1">$1</a>', $snippet);
+
+                        echo "</td>";
                 echo "</tr>";
                 }
         }
@@ -86,24 +131,31 @@ $(document).ready(function(){
         </td></tbody>
         </table>
         </div>
+
 </div>
-<div id="example"></div>
 <iframe id="resourceContent" width="100%" height="650" frameBorder="0"></iframe>
 
 </body>
 </html>
 <script type="text/javascript">
-        $('a').on('click', function(e) {
+        $('td a').on('click', function(e) {
                 e.preventDefault();
                 var href = $(this).attr('href');
                 $('#resourceContent').attr("src", href);
                 table.draw(false);
         });
-	
-    // Show example
-	$('span').click(function() {
-	    varid = $(this).attr('id');
-	    element = $('div#' + varid).html();
-	    $('div#example').html(element);
+
+	$.fn.extend({
+    	toggleText: function(a, b){
+        	return this.text(this.text() == b ? a : b);
+    	}
 	});
+
+    // Show example
+    $('span').click(function() {
+	    varid = $(this).attr('id');
+	    $('div#' + varid).toggle('slow');
+	    $('span#' + varid).toggleText('Example', 'Close');
+    });
 </script>
+
