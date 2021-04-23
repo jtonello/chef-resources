@@ -10,13 +10,15 @@ RUN echo "extension=yaml.so" > /usr/local/etc/php/conf.d/yaml.ini
 
 WORKDIR /var/www/html
 
-RUN mkdir css
+RUN mkdir css 
 
 COPY ./css/style.css ./css
-COPY index.php .
+COPY *.php ./
 
 RUN git clone https://github.com/chef/chef-web-docs
-RUN mv chef-web-docs/data/infra/resources ./ 
+RUN mv chef-web-docs/data/infra/resources ./chef-resources
 RUN rm -r chef-web-docs
 
- 
+RUN git clone https://github.com/inspec/inspec.git
+RUN mv inspec/docs-chef-io/content/inspec/resources ./inspec-resources
+RUN rm -r inspec
