@@ -38,8 +38,8 @@ $(document).ready(function(){
             <thead>
             <tr>
                 <th colspan='1'>Resource</th>
-		<th colspan='1'>Examples</th>
                 <th colspan='1'>Usage</th>
+		<th colspan='1'>Examples</th>
             </tr>
             </thead>
             <tbody>
@@ -66,7 +66,6 @@ $(document).ready(function(){
                 if (strpos($resource_file, '.yaml')) {
     
 			echo "<td width='200px'><a href='$url/$resource_name#examples'>$resource_name</a></td>";
-			echo "<td width='300px'>\n<span id='example$i'>Example</span>\n<div id='example$i' style='display:none;'>" . $Parsedown->text($example) . "</div>\n</td>";
                         echo "<td width='400px'>";
                                 if(!$string ) {
                                         $string = $parsed['resource_description_list'][1]['markdown'];
@@ -80,6 +79,7 @@ $(document).ready(function(){
 					echo " (New in: $new_in)";
 				}
                         echo "</td>";
+			echo "<td width='300px'>\n<span id='example$i'>Example</span>\n<div id='example$i' style='display:none;'>" . $Parsedown->text($example) . "</div>\n</td>";
                 //      if(($i+1)%2==0 && $i!=sizeof($lines)-1) echo '</tr><tr>';
                 echo "</tr>";
                 }
@@ -93,8 +93,8 @@ $(document).ready(function(){
             <thead>
             <tr>
                 <th colspan='1'>Resource</th>
-                <th colspan='1'>Examples</th>
                 <th colspan='1'>Usage</th>
+                <th colspan='1'>Examples</th>
             </tr>
             </thead>
             <tbody>
@@ -113,7 +113,6 @@ $(document).ready(function(){
                 if (strpos($resource_file, '.md') && $resource_name != '_index') {
                         $snippet = preg_match("/^\#\# Syntax(.*)#\#/msU",$file_content,$match);
                         echo "<td width='200px'><a href='$url/$resource_name'>$resource_name</a></td>";
-                        echo "<td width='300px'>\n<span id='inspec$i'>Example</span>\n<div id='inspec$i' style='display:none;'>" . $Parsedown->text($match[1])  . "</div>\n</td>";
                         echo "<td width='400px'>";
                                 if($file_content) {
                                         $use = preg_match("/^(Use.*)#\#/msU",$file_content,$match);
@@ -122,6 +121,7 @@ $(document).ready(function(){
                                 echo preg_replace("/<code>(.*?)<\/code>/", '<a href="$inspecurl/$1">$1</a>', $snippet);
 
                         echo "</td>";
+                        echo "<td width='300px'>\n<span id='inspec$i'>Example</span>\n<div id='inspec$i' style='display:none;'>" . $Parsedown->text($match[1])  . "</div>\n</td>";
                 echo "</tr>";
                 }
         }
