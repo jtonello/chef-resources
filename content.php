@@ -4,7 +4,7 @@
 </head>
 <body>
 <?php
-echo $myhref = $_GET['myhref'];
+$myhref = $_GET['myhref'];
 require_once dirname(__FILE__) . '/vendor/autoload.php';
 
 $response = WpOrg\Requests\Requests::get($myhref);
