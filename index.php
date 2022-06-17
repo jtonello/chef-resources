@@ -141,7 +141,7 @@ $(document).ready(function(){
         $('td a').on('click', function(e) {
                 e.preventDefault();
                 var href = $(this).attr('href');
-                $('#resourceContent').attr("src", href);
+                $("#resourceContent").attr("src", "content.php?myhref=" + href);
                 table.draw(false);
         });
 
