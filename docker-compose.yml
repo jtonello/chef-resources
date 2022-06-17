@@ -3,7 +3,6 @@ services:
   chef-resources:
     build: ./
     restart: always
-    network_mode: "host"
     container_name: "chef-resources"
     ports:
     - "8080:80"
