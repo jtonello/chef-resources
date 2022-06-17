@@ -23,4 +23,5 @@ RUN git clone https://github.com/inspec/inspec.git
 RUN mv inspec/docs-chef-io/content/inspec/resources ./inspec-resources
 RUN rm -r inspec
 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer require rmccue/requests
