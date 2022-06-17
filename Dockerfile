@@ -22,3 +22,5 @@ RUN rm -r chef-web-docs
 RUN git clone https://github.com/inspec/inspec.git
 RUN mv inspec/docs-chef-io/content/inspec/resources ./inspec-resources
 RUN rm -r inspec
+
+RUN composer require rmccue/requests
